@@ -131,31 +131,6 @@ define(['N/ui/serverWidget', 'N/search', 'N/log', 'N/runtime', 'N/file'], functi
           type: serverWidget.FieldType.TEXT,
           label: 'Sales Order Date'
         });
-
-        sublist.addField({
-          id: 'work_order_lastdate',
-          type: serverWidget.FieldType.TEXT,
-          label: 'Last Date Worked'
-        }).updateDisplayType({
-         displayType: serverWidget.FieldDisplayType.NORMAL
-        });
-
-        sublist.addField({
-          id: 'work_order_compdate',
-          type: serverWidget.FieldType.TEXT,
-          label: 'Date Work Completed'
-        }).updateDisplayType({
-         displayType: serverWidget.FieldDisplayType.NORMAL
-        });
-
-        sublist.addField({
-          id: 'work_order_prognotes',
-          type: serverWidget.FieldType.TEXTAREA,
-          label: 'Progress Notes'
-        }).updateDisplayType({
-         displayType: serverWidget.FieldDisplayType.NORMAL
-        });
-        
         sublist.addField({
           id: 'invoice_date',
           type: serverWidget.FieldType.TEXT,
@@ -466,18 +441,6 @@ define(['N/ui/serverWidget', 'N/search', 'N/log', 'N/runtime', 'N/file'], functi
               label: "Date"
             }),
             search.createColumn({
-              name: "custbody_last_date_worked",
-              summary: "MAX"
-            }),
-            search.createColumn({
-              name: "custbody_date_work_completed",
-              summary: "MAX"
-            }),
-            // search.createColumn({
-            //   name: "custbody_progress_notes",
-            //   summary: "GROUP"
-            // }),
-            search.createColumn({
               name: "closed",
               summary: "GROUP",
               label: "Closed"
@@ -604,33 +567,11 @@ define(['N/ui/serverWidget', 'N/search', 'N/log', 'N/runtime', 'N/file'], functi
               line: line,
               value: contractV
             });
-
             
             sublist.setSublistValue({
               id: 'work_order_date',
               line: line,
               value: result.getValue({ name: 'trandate', summary: 'MAX' })
-            });
-            
-            if (result.getValue({ name: 'custbody_last_date_worked', summary: 'MAX' }))
-            sublist.setSublistValue({
-              id: 'work_order_lastdate',
-              line: line,
-              value: result.getValue({ name: 'custbody_last_date_worked', summary: 'MAX' })
-            });
-            
-            if (result.getValue({ name: 'custbody_date_work_completed', summary: 'MAX' }))
-            sublist.setSublistValue({
-              id: 'work_order_compdate',
-              line: line,
-              value: result.getValue({ name: 'custbody_date_work_completed', summary: 'MAX' })
-            });
-            
-            
-            sublist.setSublistValue({
-              id: 'work_order_prognotes',
-              line: line,
-              value: '..'
             });
 
             if (billedDate)
@@ -797,24 +738,6 @@ define(['N/ui/serverWidget', 'N/search', 'N/log', 'N/runtime', 'N/file'], functi
             line: i
           });
 
-          var work_order_lastdate = context.request.getSublistValue({
-            group: sublistId,
-            name: 'work_order_lastdate',
-            line: i
-          });
-
-          var work_order_compdate = context.request.getSublistValue({
-            group: sublistId,
-            name: 'work_order_compdate',
-            line: i
-          });
-
-          var work_order_proggnote = context.request.getSublistValue({
-            group: sublistId,
-            name: 'work_order_prognotes',
-            line: i
-          });
-
            var billed_date = context.request.getSublistValue({
             group: sublistId,
             name: 'invoice_date',
@@ -884,9 +807,6 @@ define(['N/ui/serverWidget', 'N/search', 'N/log', 'N/runtime', 'N/file'], functi
             so_closed: so_closed,
             so_contract: so_contract,
             work_order_date: work_order_date,
-            work_order_lastdate: work_order_lastdate,
-            work_order_compdate: work_order_compdate,
-            work_order_proggnote: work_order_proggnote,
             billed_date: billed_date,
             work_order: work_order,
             so_class: so_class,
@@ -902,7 +822,7 @@ define(['N/ui/serverWidget', 'N/search', 'N/log', 'N/runtime', 'N/file'], functi
         // Log the extracted sublist data for debugging
         log.debug('Sublist Data', sublistData);
         
-        var csvContent = 'Project Number,Project Name,Work Start Date,SO Closed,Contact SO,Sales Order Date,Last Date Worked,Date Work Completed,Progress Notes,Latest Billed Date,SO External ID,Sales Order,Class,Sales Order Amount,Return Auth. Amount,Net Total Revenue,Billed Amount,Unbilled Revenue Amount\n';
+        var csvContent = 'Project Number,Project Name,Work Start Date,SO Closed,Contact SO,Sales Order Date,Latest Billed Date,SO External ID,Sales Order,Class,Sales Order Amount,Return Auth. Amount,Net Total Revenue,Billed Amount,Unbilled Revenue Amount\n';
         sublistData.forEach(function(row) {
           csvContent += [
             row.project_num,
@@ -911,9 +831,6 @@ define(['N/ui/serverWidget', 'N/search', 'N/log', 'N/runtime', 'N/file'], functi
             row.so_closed,
             row.so_contract,
             row.work_order_date,
-            row.work_order_lastdate,
-            row.work_order_compdate,
-            row.work_order_proggnote,
             row.billed_date,
             row.externalid,
             row.work_order,
