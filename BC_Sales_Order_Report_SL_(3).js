@@ -626,11 +626,11 @@ define(['N/ui/serverWidget', 'N/search', 'N/log', 'N/runtime', 'N/file'], functi
               value: result.getValue({ name: 'custbody_date_work_completed', summary: 'MAX' })
             });
             
-            if (result.getValue({ name: 'custbody_progress_notes', summary: 'MAX' }))
+            if (result.getValue({ name: 'custbody_progress_notes', summary: 'GROUP' }))
             sublist.setSublistValue({
               id: 'work_order_prognotes',
               line: line,
-              value: result.getValue({ name: 'custbody_progress_notes', summary: 'MAX' })
+              value: result.getValue({ name: 'custbody_progress_notes', summary: 'GROUP' })
             });
 
             if (billedDate)
