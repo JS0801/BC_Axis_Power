@@ -901,6 +901,26 @@ define(['N/ui/serverWidget', 'N/search', 'N/log', 'N/runtime', 'N/file'], functi
         
         // Log the extracted sublist data for debugging
         log.debug('Sublist Data', sublistData);
+
+        sublistData.sort(function(a, b) {
+  var classA = (a.so_class || '').toLowerCase();
+  var classB = (b.so_class || '').toLowerCase();
+
+  if (classA < classB) return -1;
+  if (classA > classB) return 1;
+
+  var projectA = (a.project_num || '').toLowerCase();
+  var projectB = (b.project_num || '').toLowerCase();
+
+  if (projectA < projectB) return -1;
+  if (projectA > projectB) return 1;
+
+  var soA = parseInt(a.work_order, 10) || 0;
+  var soB = parseInt(b.work_order, 10) || 0;
+
+  return soA - soB;
+});
+        
         
         var csvContent = 'Project Number,Project Name,Work Start Date,SO Closed,Contact SO,Sales Order Date,Last Date Worked,Date Work Completed,Progress Notes,Latest Billed Date,SO External ID,Sales Order,Class,Sales Order Amount,Return Auth. Amount,Net Total Revenue,Billed Amount,Unbilled Revenue Amount\n';
         sublistData.forEach(function(row) {
