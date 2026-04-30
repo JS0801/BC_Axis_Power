@@ -902,7 +902,13 @@ define(['N/ui/serverWidget', 'N/search', 'N/log', 'N/runtime', 'N/file'], functi
         // Log the extracted sublist data for debugging
         log.debug('Sublist Data', sublistData);
 
-        sublistData.sort(function(a, b) {
+        var totalRow = null;
+
+if (sublistData.length && sublistData[sublistData.length - 1].project === 'Total') {
+  totalRow = sublistData.pop();
+}
+
+sublistData.sort(function(a, b) {
   var classA = (a.so_class || '').toLowerCase();
   var classB = (b.so_class || '').toLowerCase();
 
@@ -920,6 +926,10 @@ define(['N/ui/serverWidget', 'N/search', 'N/log', 'N/runtime', 'N/file'], functi
 
   return soA - soB;
 });
+
+if (totalRow) {
+  sublistData.push(totalRow);
+}
         
         
         var csvContent = 'Project Number,Project Name,Work Start Date,SO Closed,Contact SO,Sales Order Date,Last Date Worked,Date Work Completed,Progress Notes,Latest Billed Date,SO External ID,Sales Order,Class,Sales Order Amount,Return Auth. Amount,Net Total Revenue,Billed Amount,Unbilled Revenue Amount\n';
